@@ -1,0 +1,21 @@
+Change Log
+==========
+
+Key
+---
+* = Info
+~ = Change
+- = Removal
++ = Addition
+
+
+
+16AUG19 0.0.1 Matthew J. Schultz (Korynkai) <matt@qmxtech.com>
+==============================================================
+* Initial Commit
+
+
+
+16AUG19 0.0.1 Matthew J. Schultz (Korynkai) <matt@qmxtech.com>
+==============================================================
+* Added CONTRIBUTING.md, CHANGELOG and .gitlab-ci.yml files.

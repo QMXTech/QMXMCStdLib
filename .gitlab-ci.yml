@@ -1,0 +1,57 @@
+image: java:8-jdk
+
+stages:
+  - build
+  - test
+#  - deploy # Deploy target (Artifactory) not ready yet.
+
+before_script:
+  - export GRADLE_USER_HOME=`pwd`/.gradle
+  - export JAVA_HOME="/usr/lib/jvm/java-8-jdk"
+  - chmod +x gradlew
+
+variables:
+  GROUP_ID: "com.qmxtech"
+  GROUP_PATH: "com/qmxtech"
+  PROJECT_VERSION: "0.0.1"
+
+cache:
+  paths:
+    - .gradle/wrapper
+    - .gradle/caches
+
+build:
+  stage: build
+  script:
+    - ./gradlew build
+  after_script:
+    - cp "build/libs/$CI_PROJECT_NAME-$PROJECT_VERSION.jar" .
+  artifacts:
+    name: "$CI_PROJECT_NAME-$PROJECT_VERSION"
+    paths:
+      - "$CI_PROJECT_NAME-$PROJECT_VERSION.jar"
+  only:
+    - master
+
+test:
+  stage: test
+  script:
+    - ./gradlew check
+
+deploy:
+  stage: deploy
+  dependencies:
+    - build
+  script:
+    - curl -fL https://getcli.jfrog.io | bash
+    - chmod +x jfrog
+    - wget https://git.qmx-software.com/snippets/1/raw -O "$CI_PROJECT_NAME-$PROJECT_VERSION.pom"
+    - sed -i "$CI_PROJECT_NAME-$PROJECT_VERSION.pom" -e 's,GROUPID,'"$GROUPID"',g' -e 's,NAME,'"$CI_PROJECT_NAME"',g' -e 's,VERSION,'"$PROJECT_VERSION"',g'
+    - ./jfrog rt c --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
+    - ./jfrog rt u "$CI_PROJECT_NAME-$PROJECT_VERSION.jar" "minecraft-release-local/$GROUP_PATH/$CI_PROJECT_NAME/$PROJECT_VERSION/"
+    - ./jfrog rt u "$CI_PROJECT_NAME-$PROJECT_VERSION.pom" "minecraft-release-local/$GROUP_PATH/$CI_PROJECT_NAME/$PROJECT_VERSION/"
+  only:
+    - master
+
+after_script:
+  - echo "End CI"
