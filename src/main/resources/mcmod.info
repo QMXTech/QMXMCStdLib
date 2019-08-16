@@ -1,0 +1,17 @@
+[
+{
+  "modid": "qmxmcstdlib",
+  "name": "QMXMCStdLib",
+  "description": "This library is meant to offer an array of general-purpose data structures and algorithms for a multitude of uses within Minecraft. Each structure must be examined for its specific usefulness to be determined.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "https://git.qmx-software.com/open-source/minecraft/qmxmcstdlib",
+  "updateUrl": "https://artifactory.qmx-software.com/minecraft-release/com/qmxtech/QMXMCStdLib/",
+  "authors": ["QMXTech"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
+
