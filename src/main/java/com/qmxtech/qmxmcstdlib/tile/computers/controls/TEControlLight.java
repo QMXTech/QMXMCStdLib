@@ -1,10 +1,10 @@
-package com.qmxtech.qmxmcstdlib.proxy;
+package com.qmxtech.qmxmcstdlib.tile.computers.controls;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// IProxy.java
-// Matthew J. Schultz (Korynkai) | Created : 16AUG19 | Last Modified : 16AUG19 by Matthew J. Schultz (Korynkai)
+// TEControlLight.java
+// Matthew J. Schultz (Korynkai) | Created : 20AUG19 | Last Modified : 20AUG19 by Matthew J. Schultz (Korynkai)
 // Version : 0.0.1
-// This is a source file for 'QMXMCStdLib'; it defines a proxy interface.
+// This is a source file for 'QMXMCStdLib'; it defines an abstract base TileEntity for a computer control of a light.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership.
 //
@@ -23,21 +23,52 @@ package com.qmxtech.qmxmcstdlib.proxy;
 // Imports
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//
+import com.qmxtech.qmxmcstdlib.computers.controls.IControlLight;
+
+import net.minecraft.nbt.NBTTagCompound;
+
+import javax.annotation.Nonnull;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// The 'IProxy' Interface
+// The 'TEControlLight' Abstract Class
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-public interface IProxy
+public class TEControlLight extends TEControl implements IControlLight
 {
-	// Methods
+    // Public Methods
 
-		void preInit();
-		void init();
-		void postInit();
+        @Override public void setBrightness( int brightness, boolean withWorldUpdate )
+        {
+            this.brightness = brightness;
+
+            if( withWorldUpdate )
+                doWorldUpdate();
+        }
+
+        @Override public int getBrightness()
+        {
+            return brightness;
+        }
+
+        @Override public void readFromNBT( @Nonnull NBTTagCompound nbt )
+        {
+            super.readFromNBT( nbt );
+            setBrightness( nbt.getInteger( "brightness" ) );
+        }
+
+        @Override @Nonnull public NBTTagCompound writeToNBT( NBTTagCompound nbt )
+        {
+            super.writeToNBT( nbt );
+            nbt.setInteger( "brightness", getBrightness() );
+            return nbt;
+        }
+
+    // Protected Fields
+
+        @SuppressWarnings( "WeakerAccess" )
+        protected int brightness;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// End of 'IProxy.java'
+// End of 'TEControlLight.java'
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

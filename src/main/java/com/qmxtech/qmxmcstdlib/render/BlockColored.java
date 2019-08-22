@@ -1,10 +1,10 @@
-package com.qmxtech.qmxmcstdlib.proxy;
+package com.qmxtech.qmxmcstdlib.render;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// IProxy.java
-// Matthew J. Schultz (Korynkai) | Created : 16AUG19 | Last Modified : 16AUG19 by Matthew J. Schultz (Korynkai)
+// BlockColored.java
+// Matthew J. Schultz (Korynkai) | Created : 20AUG19 | Last Modified : 20AUG19 by Matthew J. Schultz (Korynkai)
 // Version : 0.0.1
-// This is a source file for 'QMXMCStdLib'; it defines a proxy interface.
+// This is a source file for 'QMXMCStdLib'; it implements IBlockColor for color manipulation of blocks implementing IColored.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership.
 //
@@ -23,21 +23,37 @@ package com.qmxtech.qmxmcstdlib.proxy;
 // Imports
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//
+import com.qmxtech.qmxmcstdlib.color.IColored;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.color.IBlockColor;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nonnull;
+import java.util.Objects;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// The 'IProxy' Interface
+// The 'BlockColored' Class
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-public interface IProxy
+@SuppressWarnings( "unused" )
+@SideOnly( Side.CLIENT ) public class BlockColored implements IBlockColor
 {
-	// Methods
+    // Public Methods
 
-		void preInit();
-		void init();
-		void postInit();
+        @Override public int colorMultiplier( @Nonnull IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex )
+        {
+            int RetVal = 0;
+
+            if( ( pos != null ) && ( worldIn != null ) && ( worldIn.getTileEntity( pos ) instanceof IColored ) )
+                RetVal = ( ( IColored ) Objects.requireNonNull( worldIn.getTileEntity( pos ) ) ).getColor().value();
+
+            return RetVal;
+        }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// End of 'IProxy.java'
+// End of 'BlockColored.java'
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,10 +1,10 @@
-package com.qmxtech.qmxmcstdlib.proxy;
+package com.qmxtech.qmxmcstdlib.lighting;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// IProxy.java
-// Matthew J. Schultz (Korynkai) | Created : 16AUG19 | Last Modified : 16AUG19 by Matthew J. Schultz (Korynkai)
+// IColoredLight.java
+// Matthew J. Schultz (Korynkai) | Created : 17AUG19 | Last Modified : 18AUG19 by Matthew J. Schultz (Korynkai)
 // Version : 0.0.1
-// This is a source file for 'QMXMCStdLib'; it defines a proxy interface.
+// This is a source file for 'QMXMCStdLib'; it defines a colored light mixin for a TileEntity object.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership.
 //
@@ -23,21 +23,51 @@ package com.qmxtech.qmxmcstdlib.proxy;
 // Imports
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//
+import com.qmxtech.qmxmcstdlib.color.IColored;
+import com.qmxtech.qmxmcstdlib.position.IHasPosition;
+
+import elucent.albedo.lighting.ILightProvider;
+
+import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// The 'IProxy' Interface
+// The 'IColoredLight' Interface
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-public interface IProxy
+// NOTE: com.elytradev.mirage.lighting.IColoredLight is to be removed after 1.12.2.
+// See comment in com.elytradev.mirage.lighting.IColoredLight for more details.
+@SuppressWarnings({ "deprecation", "unused" })
+@Optional.InterfaceList({
+        @Optional.Interface( iface = "elucent.albedo.lighting.ILightProvider", modid = "albedo" ),
+        @Optional.Interface( iface = "com.elytradev.mirage.lighting.IColoredLight", modid = "mirage" )
+})
+public interface IColoredLight extends ILight, IColored, IHasPosition, ILightProvider, com.elytradev.mirage.lighting.IColoredLight
 {
-	// Methods
+    // Methods
 
-		void preInit();
-		void init();
-		void postInit();
+        @Override @SideOnly( Side.CLIENT ) @Optional.Method( modid = "albedo" ) default elucent.albedo.lighting.Light provideLight()
+        {
+            return elucent.albedo.lighting.Light.builder()
+                    .pos( getPosition() )
+                    .color( getColor().value(), false )
+                    .radius( getBrightness() )
+                    .build();
+        }
+
+        @Nullable @Override @SideOnly( Side.CLIENT ) @Optional.Method( modid = "mirage" ) default com.elytradev.mirage.lighting.Light getColoredLight()
+        {
+            return com.elytradev.mirage.lighting.Light.builder()
+                    .pos( getPosition() )
+                    .color( getColor().value(), false )
+                    .radius( getBrightness() )
+                    .build();
+        }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// End of 'IProxy.java'
+// End of 'IColoredLight.java'
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

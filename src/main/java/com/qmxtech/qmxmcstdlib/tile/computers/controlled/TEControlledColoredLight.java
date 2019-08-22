@@ -1,10 +1,10 @@
-package com.qmxtech.qmxmcstdlib.proxy;
+package com.qmxtech.qmxmcstdlib.tile.computers.controlled;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// IProxy.java
-// Matthew J. Schultz (Korynkai) | Created : 16AUG19 | Last Modified : 16AUG19 by Matthew J. Schultz (Korynkai)
+// TEControlledColoredLight.java
+// Matthew J. Schultz (Korynkai) | Created : 20AUG19 | Last Modified : 20AUG19 by Matthew J. Schultz (Korynkai)
 // Version : 0.0.1
-// This is a source file for 'QMXMCStdLib'; it defines a proxy interface.
+// This is a source file for 'QMXMCStdLib'; it defines an abstract base TileEntity for a computer controlled colored light.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership.
 //
@@ -23,21 +23,62 @@ package com.qmxtech.qmxmcstdlib.proxy;
 // Imports
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//
+import com.qmxtech.qmxmcstdlib.color.ColorValue;
+import com.qmxtech.qmxmcstdlib.computers.controls.IControlColoredLight;
+import com.qmxtech.qmxmcstdlib.lighting.IColoredLight;
+
+import net.minecraft.nbt.NBTTagCompound;
+
+import javax.annotation.Nonnull;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// The 'IProxy' Interface
+// The 'TEControlledColoredLight' Abstract Class
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-public interface IProxy
+@SuppressWarnings( "unused" )
+public class TEControlledColoredLight extends TEControlledLight implements IControlColoredLight, IColoredLight
 {
-	// Methods
+    // Public Constructor
 
-		void preInit();
-		void init();
-		void postInit();
+        public TEControlledColoredLight()
+        {
+            super();
+            setColor( ColorValue.WHITE, false );
+        }
+
+    // Public Methods
+
+        @Override public void setColor( ColorValue color, boolean withWorldUpdate )
+        {
+            this.color = color;
+
+            if( withWorldUpdate )
+                doWorldUpdate();
+        }
+
+        @Override public ColorValue getColor()
+        {
+            return color;
+        }
+
+        @Override public void readFromNBT( @Nonnull NBTTagCompound nbt )
+        {
+            super.readFromNBT( nbt );
+            setColor( ColorValue.fromValue( nbt.getInteger( "color" ) ) );
+        }
+
+        @Override @Nonnull public NBTTagCompound writeToNBT( NBTTagCompound nbt )
+        {
+            super.writeToNBT( nbt );
+            nbt.setInteger( "color", getColor().value() );
+            return nbt;
+        }
+
+    // Protected Fields
+
+        protected ColorValue color;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// End of 'IProxy.java'
+// End of 'TEControlledColoredLight.java'
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -23,12 +23,19 @@ package com.qmxtech.qmxmcstdlib.proxy;
 // Imports
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//
+import com.qmxtech.qmxmcstdlib.exception.LoadingScreenException;
+import com.qmxtech.qmxmcstdlib.render.LightHalo;
+import com.qmxtech.qmxmcstdlib.tile.lighting.TELightBase;
+
+import net.minecraft.client.resources.I18n;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.Loader;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // The 'ClientProxy' Class
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+@SuppressWarnings( "unused" )
 public class ClientProxy extends CommonProxy
 {
 	// Methods
@@ -41,7 +48,18 @@ public class ClientProxy extends CommonProxy
 
 			// Perform necessary client-side pre-initialization.
 
-				/* CODE */
+			// Be nice and error client if the erroneous condition of loading both Mirage and Albedo exists.
+
+				if( Loader.isModLoaded( "mirage" ) && Loader.isModLoaded( "albedo" ) )
+				{
+					throw new LoadingScreenException(
+						LoadingScreenException.createMessage( I18n.format( "exception.qmxmcstdlib.albedomiragesimul.line1" ), 0xffffff )
+							.addLine( I18n.format( "exception.qmxmcstdlib.albedomiragesimul.line2" ), 0xeeeeee )
+							.addLine( I18n.format( "exception.qmxmcstdlib.albedomiragesimul.line3" ), 0xeeeeee )
+							.addLine( I18n.format( "exception.qmxmcstdlib.albedomiragesimul.line4" ), 0xeeeeee )
+							.addLine( I18n.format( "exception.qmxmcstdlib.albedomiragesimul.line5" ), 0xffffff )
+					);
+				}
 		}
 
 		@Override public void init()
@@ -52,7 +70,7 @@ public class ClientProxy extends CommonProxy
 
 			// Perform necessary client-side initialization.
 
-				/* CODE */
+				ClientRegistry.bindTileEntitySpecialRenderer( TELightBase.class, ( new LightHalo() ) );
 		}
 
 		@Override public void postInit()

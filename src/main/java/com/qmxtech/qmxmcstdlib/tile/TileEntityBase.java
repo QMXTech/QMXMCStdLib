@@ -1,10 +1,10 @@
-package com.qmxtech.qmxmcstdlib.proxy;
+package com.qmxtech.qmxmcstdlib.tile;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// ServerProxy.java
-// Matthew J. Schultz (Korynkai) | Created : 16AUG19 | Last Modified : 16AUG19 by Matthew J. Schultz (Korynkai)
+// TileEntityBase.java
+// Matthew J. Schultz (Korynkai) | Created : 20AUG19 | Last Modified : 20AUG19 by Matthew J. Schultz (Korynkai)
 // Version : 0.0.1
-// This is a source file for 'QMXMCStdLib'; it defines a server-side proxy class.
+// This is a source file for 'QMXMCStdLib'; it defines an abstract base TileEntity.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership.
 //
@@ -23,51 +23,70 @@ package com.qmxtech.qmxmcstdlib.proxy;
 // Imports
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// The 'ServerProxy' Class
+// The 'TileEntityBase' Abstract Class
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 @SuppressWarnings( "unused" )
-public class ServerProxy extends CommonProxy
+public abstract class TileEntityBase extends TileEntity implements ITileEntityBase
 {
-	// Methods
+    // Public Methods
 
-		@Override public void preInit()
-		{
-			// Call superclass method.
+        @Override public BlockPos getPosition()
+        {
+            return getPos();
+        }
 
-				super.preInit();
+        @Override @Nullable public SPacketUpdateTileEntity getUpdatePacket()
+        {
+            return new SPacketUpdateTileEntity( getPos(), 0, getUpdateTag() );
+        }
 
-			// Perform necessary server-side pre-initialization.
+        @Override @Nonnull public NBTTagCompound getUpdateTag()
+        {
+            NBTTagCompound tagCom = super.getUpdateTag();
+            writeToNBT( tagCom );
+            return tagCom;
+        }
 
-				/* CODE */
-		}
+        @Override public void handleUpdateTag( @Nonnull NBTTagCompound tag )
+        {
+            this.readFromNBT( tag );
+        }
 
-		@Override public void init()
-		{
-			// Call superclass method.
+        @Override public void onDataPacket( NetworkManager net, SPacketUpdateTileEntity packet )
+        {
+            readFromNBT( packet.getNbtCompound() );
+            world.notifyBlockUpdate( getPos(), world.getBlockState( getPos() ), world.getBlockState( getPos() ), 3 );
+        }
 
-				super.init();
+        @Override public boolean shouldRefresh( World world, BlockPos pos, IBlockState oldState, IBlockState newState )
+        {
+            return ( oldState.getBlock() != newState.getBlock() );
+        }
 
-			// Perform necessary server-side initialization.
+    // Protected Methods
 
-				/* CODE */
-		}
-
-		@Override public void postInit()
-		{
-			// Call superclass method.
-
-				super.postInit();
-
-			// Perform necessary server-side post-initialization.
-
-				/* CODE */
-		}
+        protected void doWorldUpdate()
+        {
+            getUpdateTag();
+            world.notifyBlockUpdate( getPos(), world.getBlockState( getPos() ), world.getBlockState( getPos() ), 2 );
+            world.markBlockRangeForRenderUpdate( getPos(), getPos() );
+            markDirty();
+        }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// End of 'ServerProxy.java'
+// End of 'TileEntityBase.java'
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

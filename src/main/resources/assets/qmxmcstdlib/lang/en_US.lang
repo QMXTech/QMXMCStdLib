@@ -1,0 +1,11 @@
+// Exceptions
+
+exception.qmxmcstdlib.albedomiragesimul.line1=Albedo and Mirage are both loaded.
+exception.qmxmcstdlib.albedomiragesimul.line2=These core mods are mutually exclusive and must not be loaded simultaneously.
+exception.qmxmcstdlib.albedomiragesimul.line3=This error exists to prevent undefined behaviour which would otherwise occur
+exception.qmxmcstdlib.albedomiragesimul.line4=(e.g. broken texture and lighting renderer).
+exception.qmxmcstdlib.albedomiragesimul.line5=Please use only one of these core mods.
+
+exception.qmxmcstdlib.loadingscreenexception.nomessage=LoadingScreenException thrown with no message!
+exception.qmxmcstdlib.loadingscreenexception.toolargeforscreen.line1=LoadingScreenException: ScreenFormattedMessage too large to fit screen!
+exception.qmxmcstdlib.loadingscreenexception.toolargeforscreen.line2=Message:

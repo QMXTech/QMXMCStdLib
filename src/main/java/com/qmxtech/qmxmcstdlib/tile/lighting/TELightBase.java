@@ -1,10 +1,10 @@
-package com.qmxtech.qmxmcstdlib.proxy;
+package com.qmxtech.qmxmcstdlib.tile.lighting;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// IProxy.java
-// Matthew J. Schultz (Korynkai) | Created : 16AUG19 | Last Modified : 16AUG19 by Matthew J. Schultz (Korynkai)
+// BaseTELight.java
+// Matthew J. Schultz (Korynkai) | Created : 20AUG19 | Last Modified : 20AUG19 by Matthew J. Schultz (Korynkai)
 // Version : 0.0.1
-// This is a source file for 'QMXMCStdLib'; it defines a proxy interface.
+// This is a source file for 'QMXMCStdLib'; it defines an abstract base TileEntity for a light.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership.
 //
@@ -23,21 +23,69 @@ package com.qmxtech.qmxmcstdlib.proxy;
 // Imports
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//
+import com.qmxtech.qmxmcstdlib.lighting.ILight;
+import com.qmxtech.qmxmcstdlib.tile.TileEntityBase;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nonnull;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// The 'IProxy' Interface
+// The 'TELightBase' Abstract Class
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-public interface IProxy
+public abstract class TELightBase extends TileEntityBase implements ILight
 {
-	// Methods
+    // Public Constructor
 
-		void preInit();
-		void init();
-		void postInit();
+        public TELightBase()
+        {
+            setBrightness( 0, false );
+        }
+
+    // Public Methods
+
+        @Override public void setBrightness( int brightness, boolean withWorldUpdate )
+        {
+            this.brightness = brightness;
+
+            if( withWorldUpdate )
+                doWorldUpdate();
+        }
+
+        @Override public int getBrightness()
+        {
+            return brightness;
+        }
+
+        @Override public void readFromNBT( @Nonnull NBTTagCompound nbt )
+        {
+            super.readFromNBT( nbt );
+            setBrightness( nbt.getInteger( "brightness" ) );
+        }
+
+        @Override @Nonnull public NBTTagCompound writeToNBT( NBTTagCompound nbt )
+        {
+            super.writeToNBT( nbt );
+            nbt.setInteger( "brightness", getBrightness() );
+            return nbt;
+        }
+
+        @SideOnly( Side.CLIENT ) @Override @Nonnull public AxisAlignedBB getRenderBoundingBox()
+        {
+            // Return render bounding box to calling routine.
+
+                return ( new AxisAlignedBB( getPos(), getPos().add( 1, 1, 1 ) ) );
+        }
+
+    // Protected Fields
+
+        protected int brightness;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// End of 'IProxy.java'
+// End of 'TELightBase.java'
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

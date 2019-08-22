@@ -36,7 +36,13 @@ import com.qmxtech.qmxmcstdlib.proxy.CommonProxy;
 // The 'QMXMCStdLib' Class
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-@Mod( modid = BuildInfo.MOD_ID, name = BuildInfo.NAME, version = BuildInfo.VERSION ) public class QMXMCStdLib
+@Mod(
+		modid = BuildInfo.MOD_ID,
+		name = BuildInfo.NAME,
+		version = BuildInfo.VERSION + "." + BuildInfo.BUILD_NUMBER,
+		dependencies = "required-after:enderio;required-after:opencomputers;after:albedo;after:mirage;"
+)
+public class QMXMCStdLib
 {
 	// Fields
 

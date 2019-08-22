@@ -1,10 +1,10 @@
-package com.qmxtech.qmxmcstdlib.proxy;
+package com.qmxtech.qmxmcstdlib.tile.lighting;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// IProxy.java
-// Matthew J. Schultz (Korynkai) | Created : 16AUG19 | Last Modified : 16AUG19 by Matthew J. Schultz (Korynkai)
+// TEColoredLightBase.java
+// Matthew J. Schultz (Korynkai) | Created : 20AUG19 | Last Modified : 20AUG19 by Matthew J. Schultz (Korynkai)
 // Version : 0.0.1
-// This is a source file for 'QMXMCStdLib'; it defines a proxy interface.
+// This is a source file for 'QMXMCStdLib'; it defines an abstract base TileEntity for a colored light.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership.
 //
@@ -23,21 +23,53 @@ package com.qmxtech.qmxmcstdlib.proxy;
 // Imports
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//
+import com.qmxtech.qmxmcstdlib.color.ColorValue;
+import com.qmxtech.qmxmcstdlib.lighting.IColoredLight;
+
+import net.minecraft.nbt.NBTTagCompound;
+
+import javax.annotation.Nonnull;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// The 'IProxy' Interface
+// The 'TEColoredLightBase' Abstract Class
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-public interface IProxy
+@SuppressWarnings( "unused" )
+public abstract class TEColoredLightBase extends TELightBase implements IColoredLight
 {
-	// Methods
+    // Public Methods
 
-		void preInit();
-		void init();
-		void postInit();
+        @Override public void setColor( ColorValue color, boolean withWorldUpdate )
+        {
+            this.color = color;
+
+            if( withWorldUpdate )
+                doWorldUpdate();
+        }
+
+        @Override public ColorValue getColor()
+        {
+            return color;
+        }
+
+        @Override public void readFromNBT( @Nonnull NBTTagCompound nbt )
+        {
+            super.readFromNBT( nbt );
+            setColor( ColorValue.fromValue( nbt.getInteger( "color" ) ) );
+        }
+
+        @Override @Nonnull public NBTTagCompound writeToNBT( NBTTagCompound nbt )
+        {
+            super.writeToNBT( nbt );
+            nbt.setInteger( "color", getColor().value() );
+            return nbt;
+        }
+
+    // Protected Fields
+
+        protected ColorValue color;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// End of 'IProxy.java'
+// End of 'TEColoredLightBase.java'
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

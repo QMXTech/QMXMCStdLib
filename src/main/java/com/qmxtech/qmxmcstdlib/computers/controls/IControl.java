@@ -1,10 +1,10 @@
-package com.qmxtech.qmxmcstdlib.proxy;
+package com.qmxtech.qmxmcstdlib.computers.controls;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// IProxy.java
-// Matthew J. Schultz (Korynkai) | Created : 16AUG19 | Last Modified : 16AUG19 by Matthew J. Schultz (Korynkai)
+// IControl.java
+// Matthew J. Schultz (Korynkai) | Created : 20AUG19 | Last Modified : 20AUG19 by Matthew J. Schultz (Korynkai)
 // Version : 0.0.1
-// This is a source file for 'QMXMCStdLib'; it defines a proxy interface.
+// This is a source file for 'QMXMCStdLib'; it defines an abstract OpenComputers controller interface.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2019 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership.
 //
@@ -23,21 +23,55 @@ package com.qmxtech.qmxmcstdlib.proxy;
 // Imports
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//
+import com.qmxtech.qmxmcstdlib.BuildInfo;
+
+import li.cil.oc.api.driver.DeviceInfo;
+import li.cil.oc.api.network.BlacklistedPeripheral;
+import li.cil.oc.api.network.Environment;
+import li.cil.oc.api.network.Message;
+import li.cil.oc.api.network.Node;
+
+import java.util.HashMap;
+import java.util.Map;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// The 'IProxy' Interface
+// The 'IControl' Interface
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-public interface IProxy
+public interface IControl extends Environment, DeviceInfo, BlacklistedPeripheral
 {
-	// Methods
+    // Methods
 
-		void preInit();
-		void init();
-		void postInit();
+        @Override default boolean isPeripheralBlacklisted()
+        {
+            return true;
+        }
+
+        @Override default Map< String, String > getDeviceInfo()
+        {
+            Map< String, String > deviceInfo = new HashMap<>();
+
+            deviceInfo.put( DeviceAttribute.Vendor, BuildInfo.VENDOR_NAME );
+
+            return deviceInfo;
+        }
+
+        @Override default void onConnect( Node node )
+        {
+            // Do nothing.
+        }
+
+        @Override default void onDisconnect( Node node )
+        {
+            // Do nothing.
+        }
+
+        @Override default void onMessage( Message message )
+        {
+            // Do nothing.
+        }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// End of 'IProxy.java'
+// End of 'IControl.java'
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

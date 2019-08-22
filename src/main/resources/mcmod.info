@@ -6,12 +6,13 @@
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "https://git.qmx-software.com/open-source/minecraft/qmxmcstdlib",
-  "updateUrl": "https://artifactory.qmx-software.com/minecraft-release/com/qmxtech/QMXMCStdLib/",
+  "updateUrl": "https://artifactory.qmx-software.com/minecraft-release/com/qmxtech/qmxmcstdlib/",
   "authors": ["QMXTech"],
   "credits": "",
   "logoFile": "",
   "screenshots": [],
-  "dependencies": []
+  "requiredMods": [ "enderio", "opencomputers" ],
+  "dependencies": [ "enderio", "opencomputers" ]
 }
 ]
 
