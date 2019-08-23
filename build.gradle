@@ -112,13 +112,13 @@ processResources
 }
 
 
-//publishing {
-//    publications {
-//        mavenJava(MavenPublication) {
-//            from components.java
-//        }
-//    }
-//}
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
 
 artifactory {
     if( project.hasProperty( "artifactoryUser" ) ) {
@@ -130,7 +130,7 @@ artifactory {
                 password = project.getProperty( "artifactoryPass" )
             }
             defaults {
-                //publications('mavenJava')
+                publications('mavenJava')
 
                 publishArtifacts = true
                 publishPom = true
