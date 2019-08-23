@@ -130,7 +130,7 @@ artifactory {
                 password = project.getProperty( "artifactoryPass" )
             }
             defaults {
-                publications('mavenJava')
+                //publications('mavenJava')
 
                 publishArtifacts = true
                 publishPom = true
