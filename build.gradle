@@ -164,14 +164,13 @@ curseforge {
             releaseType = project.ext.buildType
             changelog = file("CHANGELOG")
             mainArtifact(jar) {
-                displayName = "QMXMCStdLib version: $project.version"
+                displayName = "QMXMCStdLib $project.version"
                 relations {
                     requiredDependency 'opencomputers'
                     requiredDependency 'ender-io'
                     optionalDependency 'albedo'
                 }
             }
-            addArtifact sourceJar
         }
     }
 }
