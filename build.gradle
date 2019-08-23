@@ -12,6 +12,7 @@ buildscript {
 }
 
 plugins {
+    id 'java'
     id 'maven-publish'
     id 'com.jfrog.artifactory' version '4.9.8'
 }
@@ -111,23 +112,26 @@ processResources
     }
 }
 
-//artifacts {
-//    archives jar
-//    archives sourceJar
-//}
+artifacts {
+    archives jar
+    archives sourceJar
+}
+
 
 publishing {
     publications {
-        mavenJava(MavenPublication) {
+        libJar(MavenPublication) {
+            from components.java
+            artifactId = project.archivesBaseName
+            groupId = project.group
+            version = project.version
+        }
+        srcJar(MavenPublication) {
             artifactId = project.archivesBaseName
             groupId = project.group
             version = project.version
 
-            artifact sourceJar {
-                classifier "sources"
-            }
-
-            from components.java
+            artifact sourceJar
         }
     }
 }
@@ -142,7 +146,7 @@ artifactory {
                 password = project.getProperty( "artifactoryPass" )
             }
             defaults {
-                publishConfigs( "mavenJava" );
+                publications( "archives", "published" )
 
                 publishArtifacts = true
                 publishPom = true
