@@ -23,7 +23,7 @@ build:
   script:
     - ./gradlew build
   after_script:
-    - cp "build/libs/*.jar" .
+    - cp ./build/libs/"*.jar" .
   artifacts:
     name: "$CI_PROJECT_NAME-$PROJECT_VERSION"
     paths:

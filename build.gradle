@@ -111,9 +111,25 @@ processResources
     }
 }
 
-artifacts {
-    archives jar
-    archives sourceJar
+//artifacts {
+//    archives jar
+//    archives sourceJar
+//}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = project.archivesBaseName
+            groupId = project.group
+            version = project.version
+
+            artifact sourceJar {
+                classifier "sources"
+            }
+
+            from components.java
+        }
+    }
 }
 
 artifactory {
@@ -126,7 +142,7 @@ artifactory {
                 password = project.getProperty( "artifactoryPass" )
             }
             defaults {
-                publishConfigs( "archives" );
+                publishConfigs( "mavenJava" );
 
                 publishArtifacts = true
                 publishPom = true
