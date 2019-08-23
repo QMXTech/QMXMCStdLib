@@ -5,17 +5,18 @@ buildscript {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
         }
-        maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
-        }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
 
-apply plugin: "net.minecraftforge.gradle.forge"
+plugins {
+    id 'maven-publish'
+    id 'com.jfrog.artifactory' version '4.9.8'
+}
+
+apply plugin: 'net.minecraftforge.gradle.forge'
 
 def getGitRef() {
     try {
@@ -25,22 +26,23 @@ def getGitRef() {
             standardOutput = stdout
         }
         return stdout.toString().trim()
-    } catch ( Throwable e ) {
+    } catch ( Throwable ignored ) {
         return "unknown"
     }
 }
 
-if( System.getenv( "PROMOTED_NUMBER" ) != null )
-    ext.buildNumber = "${ System.getenv( "PROMOTED_NUMBER" ) }"
-else if( System.getenv( "BUILD_NUMBER" ) != null )
-    ext.buildNumber = "${ System.getenv( "BUILD_NUMBER" ) }"
-else if( buildNumber != "DEFAULT" )
-    ext.buildNumber = buildNumber
-else
-    ext.buildNumber = "+" + getGitRef()
-
 group = "com.qmxtech.qmxmcstdlib" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "QMXMCStdLib"
+
+if( project.hasProperty( "buildNumber" ) ) {
+    ext.buildNumber = buildNumber
+    ext.artifactoryPath = "minecraft-release"
+}
+else {
+    ext.buildNumber = getGitRef()
+    ext.artifactoryPath = "minecraft-snapshot"
+}
+
 version = "${version}-${ext.buildNumber}"
 
 minecraft {
@@ -86,7 +88,7 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
     deobfCompile "li.cil.oc:OpenComputers:MC1.12.2-1.7.+"
-    compile 'com.elytradev:mirage:2.0.3-rc3-SNAPSHOT'
+    deobfCompile 'com.elytradev:mirage:2.0.3-rc3-SNAPSHOT'
 }
 
 processResources
@@ -106,5 +108,33 @@ processResources
     // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
+    }
+}
+
+
+//publishing {
+//    publications {
+//        mavenJava(MavenPublication) {
+//            from components.java
+//        }
+//    }
+//}
+
+artifactory {
+    if( project.hasProperty( "artifactoryUser" ) ) {
+        contextUrl = 'https://artifactory.qmx-software.com/'
+        publish {
+            repository {
+                repoKey = project.ext.artifactoryPath
+                username = project.getProperty( "artifactoryUser")
+                password = project.getProperty( "artifactoryPass" )
+            }
+            defaults {
+                //publications('mavenJava')
+
+                publishArtifacts = true
+                publishPom = true
+            }
+        }
     }
 }
