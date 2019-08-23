@@ -111,17 +111,22 @@ processResources
     }
 }
 
+artifacts {
+    archives jar
+    archives sourceJar
+}
+
 artifactory {
     if( project.hasProperty( "artifactoryUser" ) ) {
         contextUrl = 'https://artifactory.qmx-software.com/'
         publish {
             repository {
                 repoKey = project.ext.artifactoryPath
-                username = project.getProperty( "artifactoryUser")
+                username = project.getProperty( "artifactoryUser" )
                 password = project.getProperty( "artifactoryPass" )
             }
             defaults {
-                publications('jar', 'sourceJar')
+                publishConfigs( "archives" );
 
                 publishArtifacts = true
                 publishPom = true
