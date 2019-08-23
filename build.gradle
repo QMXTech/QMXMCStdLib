@@ -111,23 +111,6 @@ processResources
     }
 }
 
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifactId = project.archivesBaseName
-            groupId = project.group
-            version = project.version
-
-            artifact sourceJar {
-                classifier "sources"
-            }
-
-            from components.java
-        }
-    }
-}
-
 artifactory {
     if( project.hasProperty( "artifactoryUser" ) ) {
         contextUrl = 'https://artifactory.qmx-software.com/'
@@ -138,7 +121,7 @@ artifactory {
                 password = project.getProperty( "artifactoryPass" )
             }
             defaults {
-                publications(archivesBaseName)
+                publications('jar', 'sourceJar')
 
                 publishArtifacts = true
                 publishPom = true
