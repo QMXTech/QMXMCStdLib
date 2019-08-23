@@ -14,6 +14,7 @@ buildscript {
 plugins {
     id 'maven'
     id 'com.jfrog.artifactory' version '4.9.8'
+    id "com.matthewprenger.cursegradle" version "1.4.0"
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
@@ -37,10 +38,12 @@ archivesBaseName = "QMXMCStdLib"
 if( project.hasProperty( "buildNumber" ) ) {
     ext.buildNumber = buildNumber
     ext.artifactoryPath = "minecraft-release"
+    ext.buildType = "release"
 }
 else {
     ext.buildNumber = getGitRef()
     ext.artifactoryPath = "minecraft-snapshot"
+    ext.buildType = "alpha"
 }
 
 version = "${version}-${ext.buildNumber}"
@@ -149,6 +152,17 @@ artifactory {
                 publishArtifacts = true
                 publishPom = true
             }
+        }
+    }
+}
+
+curseforge {
+    if( project.hasProperty( "curseforgeApiKey" ) ) {
+        apiKey = project.getProperty( "curseforgeApiKey" )
+        project {
+            id = "337056"
+            releaseType = project.ext.buildType
+            changelog = file("CHANGELOG")
         }
     }
 }

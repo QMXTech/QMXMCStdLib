@@ -40,6 +40,7 @@ deploy:
   stage: deploy
   script:
     - ./gradlew artifactoryPublish -PartifactoryUser=$ARTIFACTORY_USER -PartifactoryPass=$ARTIFACTORY_PASS
+    - ./gradlew curseforge -PcurseforgeApiKey=$CURSEFORGE_API_KEY
 
 after_script:
   - echo "End CI"
