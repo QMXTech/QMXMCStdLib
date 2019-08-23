@@ -138,7 +138,7 @@ artifactory {
                 password = project.getProperty( "artifactoryPass" )
             }
             defaults {
-                publications(project.archiveBaseName)
+                publications(archivesBaseName)
 
                 publishArtifacts = true
                 publishPom = true
