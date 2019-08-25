@@ -27,6 +27,9 @@ import com.qmxtech.qmxmcstdlib.color.ColorValue;
 import com.qmxtech.qmxmcstdlib.computers.controls.IControlColoredLight;
 import com.qmxtech.qmxmcstdlib.lighting.IColoredLight;
 
+import li.cil.oc.api.machine.Arguments;
+import li.cil.oc.api.machine.Callback;
+import li.cil.oc.api.machine.Context;
 import net.minecraft.nbt.NBTTagCompound;
 
 import javax.annotation.Nonnull;
@@ -38,15 +41,39 @@ import javax.annotation.Nonnull;
 @SuppressWarnings( "unused" )
 public class TEControlledColoredLight extends TEControlledLight implements IControlColoredLight, IColoredLight
 {
-    // Public Constructor
+    // Public Methods
 
-        public TEControlledColoredLight()
+        @Callback( doc = "function(color:number):number -- Set the color by ordinal color value ('colors' API). Returns a number representing the new ordinal color.", direct = true, limit = 32 )
+        public Object[] setColor( Context context, Arguments args ) throws Exception
         {
-            super();
-            setColor( ColorValue.WHITE, false );
+            return IControlColoredLight.super.setColor( context, args );
         }
 
-    // Public Methods
+        @SuppressWarnings( "unused" )
+        @Callback( doc = "function(color/r:number[,g:number,b:number]):number,{r:number,g:number,b:number} -- Set the color using the given RGB value, or the " +
+                "given individual RGB values. Returns a number representing the new RGB value, and an object representing the individual RGB values.", direct = true, limit = 32 )
+        public Object[] setColorRGB( Context context, Arguments args ) throws Exception
+        {
+            return IControlColoredLight.super.setColorRGB( context, args );
+        }
+
+        @SuppressWarnings( "unused" )
+        @Callback( doc = "function():number[,number,{r:number,g:number,b:number}] -- Get the current color by ordinal value ('colors' API). Returns a number " +
+                "representing the ordinal color. If this value is '16', a custom color was set and its RGB value and an object representing the individual RGB " +
+                "values will also be returned. Guaranteed not to throw.", direct = true, limit = 32 )
+        public Object[] getColor( Context context, Arguments args )
+        {
+            return IControlColoredLight.super.getColor( context, args );
+        }
+
+
+        @SuppressWarnings( "unused" )
+        @Callback( doc = "function():number,{r:number,g:number,b:number} -- Get the current color as an RGB value. Returns a number representing the new RGB value, " +
+                "and an object representing the individual RGB values. Guaranteed not to throw.", direct = true, limit = 32 )
+        public Object[] getColorRGB( Context context, Arguments args )
+        {
+            return IControlColoredLight.super.getColorRGB( context, args );
+        }
 
         @Override public void setColor( ColorValue color, boolean withWorldUpdate )
         {
@@ -64,7 +91,7 @@ public class TEControlledColoredLight extends TEControlledLight implements ICont
         @Override public void readFromNBT( @Nonnull NBTTagCompound nbt )
         {
             super.readFromNBT( nbt );
-            setColor( ColorValue.fromValue( nbt.getInteger( "color" ) ) );
+            setColor( ColorValue.fromValue( nbt.getInteger( "color" ) ), false );
         }
 
         @Override @Nonnull public NBTTagCompound writeToNBT( NBTTagCompound nbt )
@@ -76,7 +103,7 @@ public class TEControlledColoredLight extends TEControlledLight implements ICont
 
     // Protected Fields
 
-        protected ColorValue color;
+        protected ColorValue color = ColorValue.WHITE;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

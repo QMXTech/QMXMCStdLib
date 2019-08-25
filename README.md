@@ -10,6 +10,12 @@ This library is meant to offer an array of general-purpose data structures and a
 
 #### Recent Changes:
 
+>2019-08-25 by Matthew J. Schultz (Korynkai):
+
+* Colored, controllable, haloed lighting API added and completed, to be showcased in Cadmus Infrastructure; more to come soon...
+* Many other changes made, mainly to build.gradle and .gitlab-ci.yml.
+* Release 0.0.1 (beta of colored lights feature)
+
 >2019-08-16 by Matthew J. Schultz (Korynkai):
 
 * Initial Commit

@@ -28,6 +28,9 @@ import com.qmxtech.qmxmcstdlib.computers.controls.IControlLight;
 import com.qmxtech.qmxmcstdlib.tile.lighting.TELightBase;
 
 import li.cil.oc.api.Network;
+import li.cil.oc.api.machine.Arguments;
+import li.cil.oc.api.machine.Callback;
+import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.Node;
 import li.cil.oc.api.network.Visibility;
 import net.minecraft.nbt.NBTTagCompound;
@@ -44,20 +47,24 @@ import javax.annotation.Nonnull;
 
 public class TEControlledLight extends TELightBase implements IControlLight, ITickable
 {
-    // Public Constructor
-
-        @SuppressWarnings( "WeakerAccess" )
-        public TEControlledLight()
-        {
-            super();
-            node = Network.newNode( this, Visibility.Network ).withComponent( "coloredlightcontrol", Visibility.Network ).create();
-        }
-
     // Public Methods
 
         @Override public Node node()
         {
             return node;
+        }
+
+        @Callback( doc = "function(brightness:number):number -- Set the brightness of the light. Returns the new brightness." )
+        @Override public Object[] setBrightness( Context context, Arguments args ) throws Exception
+        {
+            return IControlLight.super.setBrightness( context, args );
+        }
+
+        @SuppressWarnings( "unused" )
+        @Callback( doc = "function():number -- Get the brightness of the light." )
+        @Override public Object[] getBrightness( Context context, Arguments args )
+        {
+            return IControlLight.super.getBrightness( context, args );
         }
 
         @Override public void setBrightness( int brightness, boolean withWorldUpdate )
@@ -118,6 +125,9 @@ public class TEControlledLight extends TELightBase implements IControlLight, ITi
 
                 if( needsWorldUpdate )
                     doWorldUpdate();
+
+                if( node == null )
+                    node = Network.newNode( this, Visibility.Network ).withComponent( "coloredlightcontrol", Visibility.Network ).create();
 
                 if( ( node != null ) && ( node.network() == null ) )
                     Network.joinOrCreateNetwork( this );

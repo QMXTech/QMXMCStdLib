@@ -11,8 +11,8 @@
   "credits": "",
   "logoFile": "",
   "screenshots": [],
-  "requiredMods": [ "enderio", "opencomputers" ],
-  "dependencies": [ "enderio", "opencomputers" ]
+  "requiredMods": [ "opencomputers" ],
+  "dependencies": [ "opencomputers" ]
 }
 ]
 

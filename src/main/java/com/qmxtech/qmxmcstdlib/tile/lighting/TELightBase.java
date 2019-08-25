@@ -39,13 +39,6 @@ import javax.annotation.Nonnull;
 
 public abstract class TELightBase extends TileEntityBase implements ILight
 {
-    // Public Constructor
-
-        public TELightBase()
-        {
-            setBrightness( 0, false );
-        }
-
     // Public Methods
 
         @Override public void setBrightness( int brightness, boolean withWorldUpdate )
@@ -64,7 +57,7 @@ public abstract class TELightBase extends TileEntityBase implements ILight
         @Override public void readFromNBT( @Nonnull NBTTagCompound nbt )
         {
             super.readFromNBT( nbt );
-            setBrightness( nbt.getInteger( "brightness" ) );
+            setBrightness( nbt.getInteger( "brightness" ), false );
         }
 
         @Override @Nonnull public NBTTagCompound writeToNBT( NBTTagCompound nbt )
@@ -83,7 +76,7 @@ public abstract class TELightBase extends TileEntityBase implements ILight
 
     // Protected Fields
 
-        protected int brightness;
+        protected int brightness = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

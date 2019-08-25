@@ -37,7 +37,7 @@ public interface IControlLight extends ILight, IControl
     // Methods
 
         @SuppressWarnings( "unused" )
-        @Callback( doc = "function(brightness:number):number; Set the brightness of the light. Returns the new brightness." )
+        //@Callback( doc = "function(brightness:number):number -- Set the brightness of the light. Returns the new brightness." )
         default Object[] setBrightness( Context context, Arguments args ) throws Exception
         {
             if( args.count() != 1 )
@@ -54,7 +54,7 @@ public interface IControlLight extends ILight, IControl
         }
 
         @SuppressWarnings( "unused" )
-        @Callback( doc = "function():number; Get the brightness of the light." )
+        //@Callback( doc = "function():number -- Get the brightness of the light." )
         default Object[] getBrightness( Context context, Arguments args )
         {
             return new Object[]{ getBrightness() };

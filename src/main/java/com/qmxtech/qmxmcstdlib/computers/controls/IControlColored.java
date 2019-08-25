@@ -29,7 +29,7 @@ import com.qmxtech.qmxmcstdlib.color.IColored;
 import com.qmxtech.qmxmcstdlib.log.Log;
 import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Context;
-import li.cil.oc.api.machine.Callback;
+//import li.cil.oc.api.machine.Callback;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // The 'IControlColored' Interface
@@ -40,7 +40,7 @@ public interface IControlColored extends IColored, IControl
     // Methods
 
         @SuppressWarnings( "unused" )
-        @Callback( doc = "function(color:number):number -- Set the color by ordinal color value ('colors' API). Returns a number representing the new ordinal color.", direct = true, limit = 32 )
+        //@Callback( doc = "function(color:number):number -- Set the color by ordinal color value ('colors' API). Returns a number representing the new ordinal color.", direct = true, limit = 32 )
         default Object[] setColor( Context context, Arguments args ) throws Exception
         {
             if( args.count() != 1 )
@@ -57,8 +57,8 @@ public interface IControlColored extends IColored, IControl
         }
 
         @SuppressWarnings( "unused" )
-        @Callback( doc = "function(color/r:number[,g:number,b:number]):number,{r:number,g:number,b:number} -- Set the color using the given RGB value, or the " +
-                "given individual RGB values. Returns a number representing the new RGB value, and an object representing the individual RGB values.", direct = true, limit = 32 )
+        //@Callback( doc = "function(color/r:number[,g:number,b:number]):number,{r:number,g:number,b:number} -- Set the color using the given RGB value, or the " +
+        //        "given individual RGB values. Returns a number representing the new RGB value, and an object representing the individual RGB values.", direct = true, limit = 32 )
         default Object[] setColorRGB( Context context, Arguments args ) throws Exception
         {
             if( ( args.count() != 1 ) && ( args.count() != 3 ) )
@@ -94,9 +94,9 @@ public interface IControlColored extends IColored, IControl
         }
 
         @SuppressWarnings( "unused" )
-        @Callback( doc = "function():number[,number,{r:number,g:number,b:number}] -- Get the current color by ordinal value ('colors' API). Returns a number " +
-                "representing the ordinal color. If this value is '16', a custom color was set and its RGB value and an object representing the individual RGB " +
-                "values will also be returned. Guaranteed not to throw.", direct = true, limit = 32 )
+        //@Callback( doc = "function():number[,number,{r:number,g:number,b:number}] -- Get the current color by ordinal value ('colors' API). Returns a number " +
+        //        "representing the ordinal color. If this value is '16', a custom color was set and its RGB value and an object representing the individual RGB " +
+        //        "values will also be returned. Guaranteed not to throw.", direct = true, limit = 32 )
         default Object[] getColor( Context context, Arguments args )
         {
             if ( getColor().ordinal() == 16 )
@@ -107,8 +107,8 @@ public interface IControlColored extends IColored, IControl
 
 
         @SuppressWarnings( "unused" )
-        @Callback( doc = "function():number,{r:number,g:number,b:number}; Get the current color as an RGB value. Returns a number representing the new RGB value, " +
-                "and an object representing the individual RGB values. Guaranteed not to throw.", direct = true, limit = 32 )
+        //@Callback( doc = "function():number,{r:number,g:number,b:number} -- Get the current color as an RGB value. Returns a number representing the new RGB value, " +
+        //        "and an object representing the individual RGB values. Guaranteed not to throw.", direct = true, limit = 32 )
         default Object[] getColorRGB( Context context, Arguments args )
         {
             return new Object[]{ getColor().value(), getColor().getRGBObject() };

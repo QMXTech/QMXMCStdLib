@@ -38,7 +38,7 @@ archivesBaseName = "QMXMCStdLib"
 if( project.hasProperty( "buildNumber" ) ) {
     ext.buildNumber = buildNumber
     ext.artifactoryPath = "minecraft-release"
-    ext.buildType = "release"
+    ext.buildType = "beta"
 }
 else {
     ext.buildNumber = getGitRef()
@@ -167,10 +167,11 @@ curseforge {
                 displayName = "QMXMCStdLib $project.version"
                 relations {
                     requiredDependency 'opencomputers'
-                    requiredDependency 'ender-io'
+                    //requiredDependency 'ender-io'
                     optionalDependency 'albedo'
                 }
             }
         }
     }
 }
+

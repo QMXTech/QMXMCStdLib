@@ -55,7 +55,7 @@ public abstract class TEColoredLightBase extends TELightBase implements IColored
         @Override public void readFromNBT( @Nonnull NBTTagCompound nbt )
         {
             super.readFromNBT( nbt );
-            setColor( ColorValue.fromValue( nbt.getInteger( "color" ) ) );
+            setColor( ColorValue.fromValue( nbt.getInteger( "color" ) ), false );
         }
 
         @Override @Nonnull public NBTTagCompound writeToNBT( NBTTagCompound nbt )
@@ -67,7 +67,7 @@ public abstract class TEColoredLightBase extends TELightBase implements IColored
 
     // Protected Fields
 
-        protected ColorValue color;
+        protected ColorValue color = ColorValue.WHITE;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

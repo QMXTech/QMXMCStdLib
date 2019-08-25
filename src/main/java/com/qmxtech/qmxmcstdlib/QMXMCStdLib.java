@@ -40,7 +40,7 @@ import com.qmxtech.qmxmcstdlib.proxy.CommonProxy;
 		modid = BuildInfo.MOD_ID,
 		name = BuildInfo.NAME,
 		version = BuildInfo.VERSION + "." + BuildInfo.BUILD_NUMBER,
-		dependencies = "required-after:enderio;required-after:opencomputers;after:albedo;after:mirage;"
+		dependencies = "required-after:opencomputers;after:albedo;after:mirage;" // required-after:enderio;
 )
 public class QMXMCStdLib
 {

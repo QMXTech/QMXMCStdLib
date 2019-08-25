@@ -41,13 +41,6 @@ import javax.annotation.Nonnull;
 @SuppressWarnings( "WeakerAccess" )
 public class TEControl extends TileEntityBase implements IControl, ITickable
 {
-    // Public Constructor
-
-        public TEControl()
-        {
-            node = Network.newNode( this, Visibility.Network ).withComponent( "coloredlightcontroller", Visibility.Network ).create();
-        }
-
     // Public Methods
 
         @Override public Node node()
@@ -79,8 +72,11 @@ public class TEControl extends TileEntityBase implements IControl, ITickable
 
         @Override public void update()
         {
+            if( node == null )
+                node = Network.newNode( this, Visibility.Network ).withComponent( "coloredlightcontrol", Visibility.Network ).create();
+
             if( ( node != null ) && ( node.network() == null ) )
-                Network.joinOrCreateNetwork(this);
+                Network.joinOrCreateNetwork( this );
         }
 
         @Override public void onChunkUnload()

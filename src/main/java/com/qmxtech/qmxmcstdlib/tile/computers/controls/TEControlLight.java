@@ -25,6 +25,9 @@ package com.qmxtech.qmxmcstdlib.tile.computers.controls;
 
 import com.qmxtech.qmxmcstdlib.computers.controls.IControlLight;
 
+import li.cil.oc.api.machine.Arguments;
+import li.cil.oc.api.machine.Callback;
+import li.cil.oc.api.machine.Context;
 import net.minecraft.nbt.NBTTagCompound;
 
 import javax.annotation.Nonnull;
@@ -36,6 +39,19 @@ import javax.annotation.Nonnull;
 public class TEControlLight extends TEControl implements IControlLight
 {
     // Public Methods
+
+        @Callback( doc = "function(brightness:number):number -- Set the brightness of the light. Returns the new brightness." )
+        @Override public Object[] setBrightness( Context context, Arguments args ) throws Exception
+        {
+            return IControlLight.super.setBrightness( context, args );
+        }
+
+        @SuppressWarnings( "unused" )
+        @Callback( doc = "function():number -- Get the brightness of the light." )
+        @Override public Object[] getBrightness( Context context, Arguments args )
+        {
+            return IControlLight.super.getBrightness( context, args );
+        }
 
         @Override public void setBrightness( int brightness, boolean withWorldUpdate )
         {
@@ -66,7 +82,7 @@ public class TEControlLight extends TEControl implements IControlLight
     // Protected Fields
 
         @SuppressWarnings( "WeakerAccess" )
-        protected int brightness;
+        protected int brightness = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
