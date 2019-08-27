@@ -1,3 +1,7 @@
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+import groovy.json.JsonParserType
+
 buildscript {
     repositories {
         mavenCentral()
@@ -32,21 +36,43 @@ def getGitRef() {
     }
 }
 
+def getGitMessage() {
+    try {
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'log', '-1', '--pretty=%B'
+            standardOutput = stdout
+        }
+        return stdout.toString().trim()
+    } catch ( Throwable ignored ) {
+        return "unknown"
+    }
+}
+
 group = "com.qmxtech.qmxmcstdlib" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "QMXMCStdLib"
+ext.displayName = "QMX Minecraft Standard Library"
 
 if( project.hasProperty( "buildNumber" ) ) {
-    ext.buildNumber = buildNumber
-    ext.artifactoryPath = "minecraft-release"
-    ext.buildType = "beta"
-}
-else {
-    ext.buildNumber = getGitRef()
+    if( project.getProperty( "buildNumber" ) == "release" ) {
+        ext.version = project.version
+        ext.artifactoryPath = "minecraft-release"
+        ext.buildType = "beta" // labelled "beta" for now, until actual releases
+    }
+    else {
+        ext.version = project.version + "-" + buildNumber
+        ext.artifactoryPath = "minecraft-snapshot"
+        ext.buildType = "alpha"
+    }
+} else {
+    ext.version = project.version + "-" + getGitRef()
     ext.artifactoryPath = "minecraft-snapshot"
     ext.buildType = "alpha"
 }
 
-version = "${version}-${ext.buildNumber}"
+ext.gitRef = getGitRef()
+ext.gitMessage = getGitMessage()
+version = "${ext.version}"
 
 minecraft {
     version = project.mcversion + "-" + project.forgeversion
@@ -61,7 +87,6 @@ minecraft {
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 
     replace '@VERSION@', project.version
-    replace '@BUILD_NUMBER@', project.ext.buildNumber
 }
 
 repositories {
@@ -136,6 +161,75 @@ artifacts {
     archives sourceJar
 }
 
+task gitlabPublish {
+    if( project.hasProperty( "gitlabToken" ) ) {
+        def data = JsonOutput.toJson([
+            name: "${project.ext.displayName} ${version}",
+            tag_name: version,
+            description: project.ext.gitMessage,
+            ref: project.ext.gitRef,
+            assets: [
+                links: [
+                    [
+                        name: "${archivesBaseName}-${version}.jar",
+                        url: "https://artifactory.qmx-software.com/minecraft-release/com/qmxtech/qmxmcstdlib/${archivesBaseName}/${version}/${archivesBaseName}-${version}.jar"
+                    ],
+                    [
+                        name: "${archivesBaseName}-${version}-sources.jar",
+                        url: "https://artifactory.qmx-software.com/minecraft-release/com/qmxtech/qmxmcstdlib/${archivesBaseName}/${version}/${archivesBaseName}-${version}-sources.jar"
+                    ]
+                ]
+            ]
+        ])
+        def request = new URL( "https://git.qmx-software.com/api/v4/projects/64/releases" ).openConnection()
+        request.setRequestMethod( "POST" )
+        request.setDoOutput( true )
+        request.setRequestProperty( "Content-Type", "application/json" )
+        request.setRequestProperty( "PRIVATE-TOKEN", project.gitlabToken )
+        request.getOutputStream().write( data.getBytes() )
+        def response = request.getResponseCode();
+        if( response == 201 ) {
+            println( "GitLab Publish: Success!" );
+        } else {
+            throw new GradleException( "GitLab Publish: Failure." )
+        }
+    }
+}
+
+task githubPublish {
+    if( project.hasProperty( "githubToken" ) ) {
+        def data = JsonOutput.toJson([
+            name: "${project.ext.displayName} ${version}",
+            tag_name: version,
+            body: project.ext.gitMessage,
+            target_commitish: "master"
+        ])
+        def req1 = new URL( "https://api.github.com/repos/QMXTech/${archivesBaseName}/releases" ).openConnection()
+        req1.setRequestMethod( "POST" )
+        req1.setDoOutput( true )
+        req1.setRequestProperty( "Content-Type", "application/json" )
+        req1.setRequestProperty( "Authorization", "token ${project.githubToken}" )
+        req1.getOutputStream().write( data.getBytes() )
+        def req1rc = req1.getResponseCode();
+        if( req1rc == 201 ) {
+            def req1res = new JsonSlurper().setType(JsonParserType.LAX).parseText( r1url.getInputStream().getText() )
+            def req2 = new URL( req1res.upload_url.minus( "{?name,label}" ) + "?name=${archivesBaseName}-${version}.jar" ).openConnection()
+            req2.setRequestMethod( "POST" )
+            req2.setDoOutput( true )
+            req2.setRequestProperty( "Content-Type", "application/java-archive" )
+            req2.setRequestProperty( "Authorization", "token ${project.githubToken}" )
+            req2.getOutputStream().write( file( "build/libs/${archivesBaseName}-${version}.jar" ).getBytes() )
+            def req2rc = p2url.getResponseCode();
+            if( req2rc == 201 ) {
+                println( "GitHub Publish: Success!" )
+            } else {
+                throw new GradleException( "GitHub Publish: Failure." )
+            }
+        } else {
+            throw new GradleException( "GitHub Publish: Failure." )
+        }
+    }
+}
 
 artifactory {
     if( project.hasProperty( "artifactoryUser" ) ) {
@@ -175,3 +269,9 @@ curseforge {
     }
 }
 
+task publish {
+    dependsOn artifactoryPublish
+    dependsOn gitlabPublish
+    dependsOn githubPublish
+    dependsOn curseforge
+}

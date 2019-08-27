@@ -3,7 +3,7 @@ image: java:8-jdk
 stages:
   - build
   - test
-  - deploy
+  - publish
 
 before_script:
   - export GRADLE_USER_HOME=`pwd`/.gradle
@@ -12,6 +12,7 @@ before_script:
 
 variables:
   PROJECT_VERSION: "0.0.1"
+  GRADLE_FLAGS: "-PbuildNumber=\"release\""
 
 cache:
   paths:
@@ -21,7 +22,7 @@ cache:
 build:
   stage: build
   script:
-    - ./gradlew build
+    - ./gradlew build $GRADLE_FLAGS
   after_script:
     - "cp build/libs/*.jar ."
   artifacts:
@@ -34,13 +35,12 @@ build:
 test:
   stage: test
   script:
-    - ./gradlew check
+    - ./gradlew check $GRADLE_FLAGS
 
-deploy:
-  stage: deploy
+publish:
+  stage: publish
   script:
-    - ./gradlew artifactoryPublish -PartifactoryUser=$ARTIFACTORY_USER -PartifactoryPass=$ARTIFACTORY_PASS
-    - ./gradlew curseforge -PcurseforgeApiKey=$CURSEFORGE_API_KEY -PbuildNumber="beta1"
+    - ./gradlew publish -PartifactoryUser=$ARTIFACTORY_USER -PartifactoryPass=$ARTIFACTORY_PASS -PgitlabToken=$GITLAB_TOKEN -PgithubToken=$GITHUB_TOKEN -PcurseforgeApiKey=$CURSEFORGE_API_KEY $GRADLE_FLAGS
 
 after_script:
   - echo "End CI"
