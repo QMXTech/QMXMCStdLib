@@ -40,7 +40,11 @@ test:
 publish:
   stage: publish
   script:
-    - ./gradlew createPom artifactoryPublish gitlabPublish githubPublish curseforge -PartifactoryUser=$ARTIFACTORY_USER -PartifactoryPass=$ARTIFACTORY_PASS -PgitlabToken=$GITLAB_TOKEN -PgithubToken=$GITHUB_TOKEN -PcurseforgeApiKey=$CURSEFORGE_API_KEY $GRADLE_FLAGS
+    - ./gradlew createPom
+    - ./gradlew artifactoryPublish -PartifactoryUser=$ARTIFACTORY_USER -PartifactoryPass=$ARTIFACTORY_PASS $GRADLE_FLAGS
+    - ./gradlew gitlabPublish -PgitlabToken=$GITLAB_TOKEN $GRADLE_FLAGS
+    - ./gradlew githubPublish -PgithubToken=$GITHUB_TOKEN $GRADLE_FLAGS
+    - ./gradlew curseforge -PcurseforgeApiKey=$CURSEFORGE_API_KEY $GRADLE_FLAGS
 
 after_script:
   - echo "End CI"
