@@ -161,6 +161,25 @@ artifacts {
     archives sourceJar
 }
 
+artifactory {
+    if( project.hasProperty( "artifactoryUser" ) ) {
+        contextUrl = 'https://artifactory.qmx-software.com/'
+        publish {
+            repository {
+                repoKey = project.ext.artifactoryPath
+                username = project.getProperty( "artifactoryUser" )
+                password = project.getProperty( "artifactoryPass" )
+            }
+            defaults {
+                publishConfigs( 'archives' )
+
+                publishArtifacts = true
+                publishPom = true
+            }
+        }
+    }
+}
+
 task gitlabPublish {
     if( project.hasProperty( "gitlabToken" ) ) {
         def data = JsonOutput.toJson([
@@ -173,10 +192,6 @@ task gitlabPublish {
                     [
                         name: "${archivesBaseName}-${version}.jar",
                         url: "https://artifactory.qmx-software.com/minecraft-release/com/qmxtech/qmxmcstdlib/${archivesBaseName}/${version}/${archivesBaseName}-${version}.jar"
-                    ],
-                    [
-                        name: "${archivesBaseName}-${version}-sources.jar",
-                        url: "https://artifactory.qmx-software.com/minecraft-release/com/qmxtech/qmxmcstdlib/${archivesBaseName}/${version}/${archivesBaseName}-${version}-sources.jar"
                     ]
                 ]
             ]
@@ -212,14 +227,14 @@ task githubPublish {
         req1.getOutputStream().write( data.getBytes() )
         def req1rc = req1.getResponseCode();
         if( req1rc == 201 ) {
-            def req1res = new JsonSlurper().setType(JsonParserType.LAX).parseText( r1url.getInputStream().getText() )
+            def req1res = new JsonSlurper().setType(JsonParserType.LAX).parseText( req1.getInputStream().getText() )
             def req2 = new URL( req1res.upload_url.minus( "{?name,label}" ) + "?name=${archivesBaseName}-${version}.jar" ).openConnection()
             req2.setRequestMethod( "POST" )
             req2.setDoOutput( true )
             req2.setRequestProperty( "Content-Type", "application/java-archive" )
             req2.setRequestProperty( "Authorization", "token ${project.githubToken}" )
             req2.getOutputStream().write( file( "build/libs/${archivesBaseName}-${version}.jar" ).getBytes() )
-            def req2rc = p2url.getResponseCode();
+            def req2rc = req2.getResponseCode();
             if( req2rc == 201 ) {
                 println( "GitHub Publish: Success!" )
             } else {
@@ -227,25 +242,6 @@ task githubPublish {
             }
         } else {
             throw new GradleException( "GitHub Publish: Failure." )
-        }
-    }
-}
-
-artifactory {
-    if( project.hasProperty( "artifactoryUser" ) ) {
-        contextUrl = 'https://artifactory.qmx-software.com/'
-        publish {
-            repository {
-                repoKey = project.ext.artifactoryPath
-                username = project.getProperty( "artifactoryUser" )
-                password = project.getProperty( "artifactoryPass" )
-            }
-            defaults {
-                publishConfigs( 'archives' )
-
-                publishArtifacts = true
-                publishPom = true
-            }
         }
     }
 }
