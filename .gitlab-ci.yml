@@ -40,7 +40,7 @@ test:
 publish:
   stage: publish
   script:
-    - ./gradlew createPom
+    - ./gradlew pomFile
     - ./gradlew artifactoryPublish -PartifactoryUser=$ARTIFACTORY_USER -PartifactoryPass=$ARTIFACTORY_PASS $GRADLE_FLAGS
     - ./gradlew gitlabPublish -PgitlabToken=$GITLAB_TOKEN $GRADLE_FLAGS
     - ./gradlew githubPublish -PgithubToken=$GITHUB_TOKEN $GRADLE_FLAGS
