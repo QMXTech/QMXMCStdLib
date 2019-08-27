@@ -165,7 +165,6 @@ artifactory {
     if( project.hasProperty( "artifactoryUser" ) ) {
         contextUrl = 'https://artifactory.qmx-software.com/'
         publish {
-            dependsOn pomFile
             repository {
                 repoKey = project.ext.artifactoryPath
                 username = project.getProperty( "artifactoryUser" )
@@ -182,7 +181,6 @@ artifactory {
 }
 
 task gitlabPublish {
-    dependsOn artifactoryPublish
     if( project.hasProperty( "gitlabToken" ) ) {
         def data = JsonOutput.toJson([
             name: "${project.ext.displayName} ${version}",
@@ -214,7 +212,6 @@ task gitlabPublish {
 }
 
 task githubPublish {
-    dependsOn gitlabPublish
     if( project.hasProperty( "githubToken" ) ) {
         def data = JsonOutput.toJson([
             name: "${project.ext.displayName} ${version}",
@@ -266,9 +263,4 @@ curseforge {
             }
         }
     }
-}
-
-task publish {
-    dependsOn githubPublish
-    dependsOn curseforge
 }
