@@ -12,7 +12,7 @@ before_script:
 
 variables:
   PROJECT_VERSION: "0.0.1"
-  GRADLE_FLAGS: "-PbuildNumber=\"release\""
+  GRADLE_FLAGS: "-PbuildNumber=release"
 
 cache:
   paths:
