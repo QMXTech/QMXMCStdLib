@@ -34,3 +34,9 @@ Key
 =============================================================
 ~ Fixed bug in LightHalo causing certain blocks to become invisible.
 ~ Changed versioning system over to proper QMX versioning.
+
+
+
+31AUG19 0.1.2 Matthew J. Schultz (Korynkai) <matt@qmxtech.com>
+==============================================================
+~ Fixed a light intensity issue when using Mirage and resolve use of deprecated methods. (OpenLights will need this, too).

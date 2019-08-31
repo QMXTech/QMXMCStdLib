@@ -28,6 +28,9 @@ import com.qmxtech.qmxmcstdlib.position.IHasPosition;
 
 import elucent.albedo.lighting.ILightProvider;
 
+import com.elytradev.mirage.event.GatherLightsEvent;
+import com.elytradev.mirage.lighting.ILightEventConsumer;
+
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -40,12 +43,12 @@ import javax.annotation.Nullable;
 
 // NOTE: com.elytradev.mirage.lighting.IColoredLight is to be removed after 1.12.2.
 // See comment in com.elytradev.mirage.lighting.IColoredLight for more details.
-@SuppressWarnings({ "deprecation", "unused" })
+@SuppressWarnings( "unused" )
 @Optional.InterfaceList({
         @Optional.Interface( iface = "elucent.albedo.lighting.ILightProvider", modid = "albedo" ),
-        @Optional.Interface( iface = "com.elytradev.mirage.lighting.IColoredLight", modid = "mirage" )
+        @Optional.Interface( iface = "com.elytradev.mirage.lighting.ILightEventConsumer", modid = "mirage" )
 })
-public interface IColoredLight extends ILight, IColored, IHasPosition, ILightProvider, com.elytradev.mirage.lighting.IColoredLight
+public interface IColoredLight extends ILight, IColored, IHasPosition, ILightProvider, ILightEventConsumer
 {
     // Methods
 
@@ -58,13 +61,14 @@ public interface IColoredLight extends ILight, IColored, IHasPosition, ILightPro
                     .build();
         }
 
-        @Nullable @Override @SideOnly( Side.CLIENT ) @Optional.Method( modid = "mirage" ) default com.elytradev.mirage.lighting.Light getColoredLight()
+        @Override @SideOnly( Side.CLIENT ) @Optional.Method( modid = "mirage" ) default void gatherLights( GatherLightsEvent event )
         {
-            return com.elytradev.mirage.lighting.Light.builder()
+            event.add( com.elytradev.mirage.lighting.Light.builder()
                     .pos( getPosition() )
                     .color( getColor().value(), false )
                     .radius( getBrightness() )
-                    .build();
+                    .intensity( ( 0.25f / 15 ) * getBrightness() )
+                    .build() );
         }
 }
 

@@ -18,6 +18,10 @@ Please note the current versions of this library are unstable. This project is c
 
 #### Recent Changes:
 
+>2019-08-31 by Matthew J. Schultz (Korynkai):
+
+* Fixed a light intensity issue when using Mirage and resolve use of deprecated methods. (OpenLights will need this, too).
+
 >2019-08-30 by Robert M. Baker (Malachy):
 
 * Fixed bug in LightHalo causing certain blocks to become invisible.
