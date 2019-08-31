@@ -18,6 +18,11 @@ Please note the current versions of this library are unstable. This project is c
 
 #### Recent Changes:
 
+>2019-08-30 by Robert M. Baker (Malachy):
+
+* Fixed bug in LightHalo causing certain blocks to become invisible.
+* Changed versioning system over to proper QMX versioning.
+
 >2019-08-25 by Matthew J. Schultz (Korynkai):
 
 * Colored, controllable, haloed lighting API added and completed, to be showcased in Cadmus Infrastructure; more to come soon...

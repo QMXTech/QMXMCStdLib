@@ -79,9 +79,7 @@ public class LightHalo extends TileEntitySpecialRenderer< TELightBase >
                     GL11.glPushAttrib( GL11.GL_ENABLE_BIT );
                     GL11.glEnable( GL11.GL_BLEND );
                     GL11.glDisable( GL11.GL_LIGHTING );
-                    GL11.glDepthMask( false );
                     GL11.glBlendFunc( GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA );
-
                     GL11.glColor4f( color.rFloat(), color.gFloat(), color.bFloat(), brightness );
                     GlStateManager.translate( relativeX, relativeY, relativeZ );
                     OpenGlHelper.setLightmapTextureCoords( OpenGlHelper.lightmapTexUnit, ( 240.0f * brightness ), 0.0f );
@@ -92,6 +90,7 @@ public class LightHalo extends TileEntitySpecialRenderer< TELightBase >
                 }
                 finally
                 {
+                    GL11.glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
                     GL11.glPopAttrib();
                     GL11.glPopMatrix();
                 }

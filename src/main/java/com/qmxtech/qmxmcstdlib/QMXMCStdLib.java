@@ -37,10 +37,10 @@ import com.qmxtech.qmxmcstdlib.proxy.CommonProxy;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 @Mod(
-		modid = BuildInfo.MOD_ID,
-		name = BuildInfo.NAME,
-		version = BuildInfo.VERSION,
-		dependencies = "required-after:opencomputers;after:albedo;after:mirage;" // required-after:enderio;
+	modid = BuildInfo.MOD_ID,
+	name = BuildInfo.NAME,
+	version = BuildInfo.VERSION,
+	dependencies = "required-after:opencomputers;after:albedo;after:mirage;" // required-after:enderio;
 )
 public class QMXMCStdLib
 {

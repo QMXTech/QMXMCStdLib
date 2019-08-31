@@ -27,3 +27,10 @@ Key
 + Colored, controllable, haloed lighting API added and completed, to be showcased in Cadmus Infrastructure; more to come soon...
 ~ Many other changes made, mainly to build.gradle and .gitlab-ci.yml.
 * All current features should now be stable.
+
+
+
+30AUG19 0.1.1 Robert M. Baker (Malachy) <malachy@qmxtech.com>
+=============================================================
+~ Fixed bug in LightHalo causing certain blocks to become invisible.
+~ Changed versioning system over to proper QMX versioning.
