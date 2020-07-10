@@ -2,7 +2,7 @@ package com.qmxtech.qmxmcstdlib.position;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // IHasPosition.java
-// Matthew J. Schultz (Korynkai) | Created : 20AUG19 | Last Modified : 20AUG19 by Matthew J. Schultz (Korynkai)
+// Matthew J. Schultz (Korynkai) | Created : 20AUG19 | Last Modified : 11OCT19 by Matthew J. Schultz (Korynkai)
 // Version : 0.0.1
 // This is a source file for 'QMXMCStdLib'; it defines an interface to an object which has a Minecraft BlockPos object.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -24,6 +24,7 @@ package com.qmxtech.qmxmcstdlib.position;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // The 'IHasPosition' Interface
@@ -34,6 +35,38 @@ public interface IHasPosition
     // Methods
 
         BlockPos getPosition();
+
+        default ChunkPos getChunkPosition()
+        {
+            return new ChunkPos( getPosition() );
+        }
+
+        default int getX()
+        {
+            return getPosition().getX();
+        }
+
+        default int getY()
+        {
+            return getPosition().getY();
+        }
+
+        default int getZ()
+        {
+            return getPosition().getZ();
+        }
+
+        default boolean isNeighbor( IHasPosition position )
+        {
+            boolean retval = false;
+
+            if( ( getPosition().up() == position.getPosition() ) || ( getPosition().down() == position.getPosition() ) ||
+                ( getPosition().north() == position.getPosition() ) || ( getPosition().south() == position.getPosition() ) ||
+                ( getPosition().east() == position.getPosition() ) || ( getPosition().west() == position.getPosition() ) )
+                retval = true;
+            
+            return retval;
+        }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

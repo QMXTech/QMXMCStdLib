@@ -2,7 +2,7 @@ package com.qmxtech.qmxmcstdlib.tile.computers.controlled;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // TEControlledColoredLight.java
-// Matthew J. Schultz (Korynkai) | Created : 20AUG19 | Last Modified : 20AUG19 by Matthew J. Schultz (Korynkai)
+// Matthew J. Schultz (Korynkai) | Created : 20AUG19 | Last Modified : 27SEP19 by Matthew J. Schultz (Korynkai)
 // Version : 0.0.1
 // This is a source file for 'QMXMCStdLib'; it defines an abstract base TileEntity for a computer controlled colored light.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -30,6 +30,7 @@ import com.qmxtech.qmxmcstdlib.lighting.IColoredLight;
 import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
+import li.cil.oc.api.network.Node;
 import net.minecraft.nbt.NBTTagCompound;
 
 import javax.annotation.Nonnull;
@@ -38,8 +39,10 @@ import javax.annotation.Nonnull;
 // The 'TEControlledColoredLight' Abstract Class
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// TODO: getComponentName() moved to CadmusInfrastructure implementation.
+
 @SuppressWarnings( "unused" )
-public class TEControlledColoredLight extends TEControlledLight implements IControlColoredLight, IColoredLight
+public abstract class TEControlledColoredLight extends TEControlledLight implements IControlColoredLight, IColoredLight
 {
     // Public Methods
 

@@ -37,6 +37,7 @@ public class BuildInfo
 		public static final String NAME = "QMXMCStdLib";
 		public static final String VERSION = "@VERSION@";
 		public static final String VENDOR_NAME = "QMXTech";
+		public static final String CONFIG_FILE = "@CONFIG_FILE@";
 		public static final String CLIENT_PROXY = "com.qmxtech.qmxmcstdlib.proxy.ClientProxy";
 		public static final String SERVER_PROXY = "com.qmxtech.qmxmcstdlib.proxy.ServerProxy";
 }

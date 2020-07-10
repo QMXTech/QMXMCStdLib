@@ -2,7 +2,7 @@ package com.qmxtech.qmxmcstdlib.tile.computers.controlled;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // TEControlledLight.java
-// Matthew J. Schultz (Korynkai) | Created : 20AUG19 | Last Modified : 20AUG19 by Matthew J. Schultz (Korynkai)
+// Matthew J. Schultz (Korynkai) | Created : 20AUG19 | Last Modified : 27SEP19 by Matthew J. Schultz (Korynkai)
 // Version : 0.0.1
 // This is a source file for 'QMXMCStdLib'; it defines an abstract base TileEntity for a computer controlled light.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -27,14 +27,10 @@ import com.qmxtech.qmxmcstdlib.block.light.BlockLightBase;
 import com.qmxtech.qmxmcstdlib.computers.controls.IControlLight;
 import com.qmxtech.qmxmcstdlib.tile.lighting.TELightBase;
 
-import li.cil.oc.api.Network;
 import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.Node;
-import li.cil.oc.api.network.Visibility;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -45,14 +41,9 @@ import javax.annotation.Nonnull;
 // The 'TEControlledLight' Abstract Class
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-public class TEControlledLight extends TELightBase implements IControlLight, ITickable
+public abstract class TEControlledLight extends TELightBase implements IControlLight
 {
     // Public Methods
-
-        @Override public Node node()
-        {
-            return node;
-        }
 
         @Callback( doc = "function(brightness:number):number -- Set the brightness of the light. Returns the new brightness." )
         @Override public Object[] setBrightness( Context context, Arguments args ) throws Exception
@@ -70,37 +61,17 @@ public class TEControlledLight extends TELightBase implements IControlLight, ITi
         @Override public void setBrightness( int brightness, boolean withWorldUpdate )
         {
             this.brightness = brightness;
-            needsBrightnessUpdate = true;
+            
+            if( world.getBlockState( getPos() ).getValue( BlockLightBase.BRIGHTNESS ) != brightness )
+                world.setBlockState( getPos(), world.getBlockState( getPos() ).withProperty( BlockLightBase.BRIGHTNESS, brightness ) );
 
             if( withWorldUpdate )
-                needsWorldUpdate = true;
+                doWorldUpdate();
         }
 
         @Override public int getBrightness()
         {
             return brightness;
-        }
-
-        @Override public void readFromNBT( @Nonnull NBTTagCompound nbt )
-        {
-            super.readFromNBT( nbt );
-
-            if ( ( node != null ) && ( node.host() == this ) )
-                node.load( nbt.getCompoundTag( "oc:node" ) );
-        }
-
-        @Override @Nonnull public NBTTagCompound writeToNBT( NBTTagCompound nbt )
-        {
-            super.writeToNBT( nbt );
-
-            if ( ( node != null ) && ( node.host() == this ) )
-            {
-                final NBTTagCompound nodeNbt = new NBTTagCompound();
-                node.save( nodeNbt );
-                nbt.setTag( "oc:node", nodeNbt );
-            }
-
-            return nbt;
         }
 
         @SideOnly( Side.CLIENT ) @Override @Nonnull public AxisAlignedBB getRenderBoundingBox()
@@ -110,56 +81,19 @@ public class TEControlledLight extends TELightBase implements IControlLight, ITi
                 return ( new AxisAlignedBB( getPos(), getPos().add( 1, 1, 1 ) ) );
         }
 
-        @Override public void update()
+        @Override public void _setNode( Node node )
         {
-            if( !world.isRemote )
-            {
-                if( needsBrightnessUpdate )
-                {
-                    if( world.getBlockState( getPos() ).getBlock() instanceof BlockLightBase )
-                    {
-                        if( world.getBlockState( getPos() ).getValue( BlockLightBase.BRIGHTNESS ) != brightness )
-                            world.setBlockState( getPos(), world.getBlockState( getPos() ).withProperty( BlockLightBase.BRIGHTNESS, brightness ) );
-                    }
-                }
-
-                if( needsWorldUpdate )
-                    doWorldUpdate();
-
-                if( node == null )
-                    node = Network.newNode( this, Visibility.Network ).withComponent( "coloredlightcontrol", Visibility.Network ).create();
-
-                if( ( node != null ) && ( node.network() == null ) )
-                    Network.joinOrCreateNetwork( this );
-            }
+            this.node = node;
         }
 
-        @Override public void onChunkUnload()
+        @Override public Node _getNode()
         {
-            super.onChunkUnload();
-
-            if( node != null )
-                node.remove();
-        }
-
-        @Override public void invalidate()
-        {
-            super.invalidate();
-
-            if( node != null )
-                node.remove();
+            return node;
         }
 
     // Protected Fields
 
-        @SuppressWarnings( "WeakerAccess" )
-        protected Node node;
-
-        @SuppressWarnings( "WeakerAccess" )
-        protected boolean needsBrightnessUpdate;
-
-        @SuppressWarnings( "WeakerAccess" )
-        protected boolean needsWorldUpdate;
+        protected Node node = null;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

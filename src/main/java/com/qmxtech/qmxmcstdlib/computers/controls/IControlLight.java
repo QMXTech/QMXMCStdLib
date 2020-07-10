@@ -25,7 +25,7 @@ package com.qmxtech.qmxmcstdlib.computers.controls;
 
 import com.qmxtech.qmxmcstdlib.lighting.ILight;
 import li.cil.oc.api.machine.Arguments;
-import li.cil.oc.api.machine.Callback;
+//import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

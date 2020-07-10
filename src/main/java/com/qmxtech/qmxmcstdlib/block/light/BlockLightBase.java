@@ -60,7 +60,6 @@ public abstract class BlockLightBase extends BlockBase
             return new BlockStateContainer( this, BRIGHTNESS );
         }
 
-        @SuppressWarnings( "deprecation" )
         @Deprecated @Override @Nonnull public IBlockState getStateFromMeta( int meta )
         {
             return this.getDefaultState().withProperty( BRIGHTNESS, meta );
@@ -82,7 +81,6 @@ public abstract class BlockLightBase extends BlockBase
             return state;
         }
 
-        @SuppressWarnings( "deprecation" )
         @Deprecated @Override public int getLightValue( IBlockState state )
         {
             lightValue = state.getValue( BRIGHTNESS );

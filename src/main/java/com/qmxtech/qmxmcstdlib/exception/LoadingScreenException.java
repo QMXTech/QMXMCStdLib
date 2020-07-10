@@ -42,8 +42,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings( "unused" )
 @SideOnly( Side.CLIENT ) public class LoadingScreenException extends CustomModLoadingErrorDisplayException
-{
-    // Public Types
+{    // Public Types
 
         static public class ScreenFormattedMessage
         {
@@ -240,6 +239,11 @@ import java.util.ArrayList;
             for( ln = 0; ln < message.lineCount(); ln++ )
                 Log.fatal( message.getLine( ln ).getString() );
         }
+
+    // Private Fields
+
+        private static final long serialVersionUID = -2844391239395340701L;
+        
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

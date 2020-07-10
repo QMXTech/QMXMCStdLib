@@ -2,7 +2,7 @@ package com.qmxtech.qmxmcstdlib.tile.computers.controls;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // TEControl.java
-// Matthew J. Schultz (Korynkai) | Created : 20AUG19 | Last Modified : 20AUG19 by Matthew J. Schultz (Korynkai)
+// Matthew J. Schultz (Korynkai) | Created : 20AUG19 | Last Modified : 27SEP19 by Matthew J. Schultz (Korynkai)
 // Version : 0.0.1
 // This is a source file for 'QMXMCStdLib'; it defines an abstract base TileEntity for a computer control.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -26,78 +26,41 @@ package com.qmxtech.qmxmcstdlib.tile.computers.controls;
 import com.qmxtech.qmxmcstdlib.computers.controls.IControl;
 import com.qmxtech.qmxmcstdlib.tile.TileEntityBase;
 
-import li.cil.oc.api.Network;
 import li.cil.oc.api.network.Node;
-import li.cil.oc.api.network.Visibility;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ITickable;
-
-import javax.annotation.Nonnull;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // The 'TEControl' Abstract Class
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 @SuppressWarnings( "WeakerAccess" )
-public class TEControl extends TileEntityBase implements IControl, ITickable
+public abstract class TEControl extends TileEntityBase implements IControl
 {
     // Public Methods
 
-        @Override public Node node()
-        {
-            return node;
-        }
-
-        @Override public void readFromNBT( @Nonnull NBTTagCompound nbt )
-        {
-            super.readFromNBT( nbt );
-
-            if ( ( node != null ) && ( node.host() == this ) )
-                node.load( nbt.getCompoundTag( "oc:node" ) );
-        }
-
-        @Override @Nonnull public NBTTagCompound writeToNBT( NBTTagCompound nbt )
-        {
-            super.writeToNBT( nbt );
-
-            if ( ( node != null ) && ( node.host() == this ) )
-            {
-                final NBTTagCompound nodeNbt = new NBTTagCompound();
-                node.save( nodeNbt );
-                nbt.setTag( "oc:node", nodeNbt );
-            }
-
-            return nbt;
-        }
-
-        @Override public void update()
-        {
-            if( node == null )
-                node = Network.newNode( this, Visibility.Network ).withComponent( "coloredlightcontrol", Visibility.Network ).create();
-
-            if( ( node != null ) && ( node.network() == null ) )
-                Network.joinOrCreateNetwork( this );
-        }
-
-        @Override public void onChunkUnload()
+        @Override public void onChunkUnload() 
         {
             super.onChunkUnload();
-
-            if( node != null )
-                node.remove();
+            removeNode();
         }
 
         @Override public void invalidate()
         {
             super.invalidate();
+            removeNode();
+        }
 
-            if( node != null )
-                node.remove();
+        @Override public Node _getNode()
+        {
+            return node;
+        }
+
+        @Override public void _setNode( Node node )
+        {
+            this.node = node;
         }
 
     // Protected Fields
 
-        @SuppressWarnings( "WeakerAccess" )
         protected Node node;
 }
 

@@ -25,6 +25,9 @@ package com.qmxtech.qmxmcstdlib.color;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Arrays;
 
 @SuppressWarnings( "unused" )
 public final class ColorValue
@@ -49,6 +52,30 @@ public final class ColorValue
         public static final ColorValue BLACK = new ColorValue( OrdinalColor.black );
 
     // Public Static Methods
+
+        public static Set< ColorValue > ordinalValues()
+        {
+            ColorValue a[] = {
+                WHITE,
+                ORANGE,
+                MAGENTA,
+                LIGHTBLUE,
+                YELLOW,
+                LIME,
+                PINK,
+                GRAY,
+                SILVER,
+                CYAN,
+                PURPLE,
+                BLUE,
+                BROWN,
+                GREEN,
+                RED,
+                BLACK
+            };
+            
+            return ( Set< ColorValue > ) new HashSet<>( Arrays.asList( a ) );
+        }
 
         public static ColorValue fromOrdinal( final int o )
         {
@@ -165,7 +192,7 @@ public final class ColorValue
                 return ( value & 0xFF );
         }
 
-        public Map getRGBObject()
+        public Map< String, Integer > getRGBObject()
         {
             // Return an object holding the RGB values
 

@@ -23,6 +23,8 @@ package com.qmxtech.qmxmcstdlib.tile;
 // Imports
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+import com.qmxtech.qmxmcstdlib.position.DimensionalPosition;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -43,9 +45,9 @@ public abstract class TileEntityBase extends TileEntity implements ITileEntityBa
 {
     // Public Methods
 
-        @Override public BlockPos getPosition()
+        @Override public DimensionalPosition getDimensionalPosition()
         {
-            return getPos();
+            return new DimensionalPosition( getPos(), getWorld().provider.getDimension() );
         }
 
         @Override @Nullable public SPacketUpdateTileEntity getUpdatePacket()

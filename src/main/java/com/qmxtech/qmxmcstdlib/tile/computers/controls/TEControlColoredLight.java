@@ -2,7 +2,7 @@ package com.qmxtech.qmxmcstdlib.tile.computers.controls;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // TEControlColoredLight.java
-// Matthew J. Schultz (Korynkai) | Created : 20AUG19 | Last Modified : 20AUG19 by Matthew J. Schultz (Korynkai)
+// Matthew J. Schultz (Korynkai) | Created : 20AUG19 | Last Modified : 27SEP19 by Matthew J. Schultz (Korynkai)
 // Version : 0.0.1
 // This is a source file for 'QMXMCStdLib'; it defines an abstract base TileEntity for a computer control of a colored light.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -38,7 +38,7 @@ import javax.annotation.Nonnull;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 @SuppressWarnings( "unused" )
-public class TEControlColoredLight extends TEControlLight implements IControlColoredLight
+public abstract class TEControlColoredLight extends TEControlLight implements IControlColoredLight
 {
     // Public Methods
 

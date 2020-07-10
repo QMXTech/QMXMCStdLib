@@ -9,3 +9,7 @@ exception.qmxmcstdlib.albedomiragesimul.line5=Please use only one of these core 
 exception.qmxmcstdlib.loadingscreenexception.nomessage=LoadingScreenException thrown with no message!
 exception.qmxmcstdlib.loadingscreenexception.toolargeforscreen.line1=LoadingScreenException: ScreenFormattedMessage too large to fit screen!
 exception.qmxmcstdlib.loadingscreenexception.toolargeforscreen.line2=Message:
+exception.qmxmcstdlib.conduit.channelregistry.channelalreadyexists=ChannelRegistry: could not register channel type provided by: "{}". Channel type "{}" already exists.
+exception.qmxmcstdlib.conduit.channelregistry.unknownchannel=ChannelRegistry: could not register channel type provided by: "{}". Unable to determine channel type.
+exception.qmxmcstdlib.conduit.channelregistry.undefinedchannel=ChannelRegistry: Could not get channel for type: "{}". An exception has occurred.
+exception.qmxmcstdlib.conduit.endpointphaseset.typereflection=EndpointPhaseSet: Error in constructing object: Could not retrieve static final field "TYPE" by reflection of object extending from IChannel.

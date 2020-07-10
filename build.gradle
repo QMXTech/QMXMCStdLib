@@ -87,6 +87,7 @@ minecraft {
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 
     replace '@VERSION@', project.version
+    replace '@CONFIG_FILE@', project.config_file
 }
 
 repositories {
@@ -98,6 +99,22 @@ repositories {
     maven {
         name = "ElytraDev"
         url = 'https://repo.elytradev.com/'
+    }
+    maven {
+        name = "tterrag"
+        url = "https://maven.tterrag.com/"
+    }
+    maven {
+        name = "tterrag2"
+        url = "https://maven2.tterrag.com/"
+    }
+    maven {
+        name = "Progwml6 maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
+    maven {
+        name = "ModMaven"
+        url = "https://modmaven.k-4u.nl"
     }
 }
 
@@ -117,6 +134,8 @@ dependencies {
 
     deobfCompile "li.cil.oc:OpenComputers:MC1.12.2-1.7.+"
     deobfCompile 'com.elytradev:mirage:2.0.3-rc3-SNAPSHOT'
+    compile "mekanism:Mekanism:1.12.2-9.4.3.330:api"
+    //compile 'com.enderio:EnderIO:1.12.2-5.1.51'
 }
 
 processResources

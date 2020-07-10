@@ -1,0 +1,11 @@
+When lights powered via RF, boost lighting?
+
+Endpoint needs "adapter" (wireless or wired) -> also needs network assoc. card
+
+Networks need a network configuration terminal for proper association; uses network association cards
+
+Energized Microfiber Conduit Networks -> needs a fiber-making machine
+
+Endpoints have differing outputs per-face and are camoflagueable
+
+Endpoint faces need configurable channel card, which allows for bundles; filters are optionally in channel card; configurable via network config. terminal
